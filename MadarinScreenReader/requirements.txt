@@ -1,0 +1,14 @@
+#for image processing and the ui
+opencv-python
+numpy
+
+#for the AI and the screen reader
+easyocr
+torch
+torchvision
+
+# for the translating
+googletrans==4.0.0-rc1
+
+# utilities, optional
+screeninfo
