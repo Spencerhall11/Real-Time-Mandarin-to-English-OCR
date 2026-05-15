@@ -24,7 +24,7 @@ eye_proc = subprocess.Popen([eye_exe], creationflags=0x08000000)
 print("Waiting for Eye to initialize Shared Memory...")
 time.sleep(2) 
 
-reader = easyocr.Reader(['ch_sim', 'en'], gpu=False)
+reader = easyocr.Reader(['ch_sim', 'en'], gpu=True)
 translator = Translator()
 translation_cache = {}
 
@@ -58,11 +58,26 @@ def run_brain():
 
                     top_left = tuple(map(int, bbox[0]))
                     cv2.putText(img_rgb, translated_text, (top_left[0], top_left[1] - 10), 
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (128, 0, 128), 2)
                 
                 cv2.rectangle(img_rgb, tuple(map(int, bbox[0])), tuple(map(int, bbox[2])), (0, 255, 0), 1)
 
             cv2.imshow("Universal Brain View", cv2.resize(img_rgb, (960, 540)))
+            
+            key = cv2.waitKey(1) & 0xFF
+
+            if key == ord('s'):
+                # create folder 
+                if not os.path.exists("Screenshots"):
+                    os.makedirs("Screenshots")
+        
+                # make filename based on current time
+                timestamp = time.strftime("%Y%m%d-%H%M%S")
+                filename = f"Screenshots/Baidu_Apply_{timestamp}.png"
+    
+                # save frame
+                cv2.imwrite(filename, img_rgb)
+                print(f"Captured: {filename}")
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
